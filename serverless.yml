@@ -3,10 +3,7 @@ service: crud-serverless-aws
 package:
   individually: true
   patterns:
-    - "!.dynamodb"
-    - "!.serverless"
-    - "!local-seeders"
-    - "!.gitignore"
+    - "!**/**"
 
 provider:
   name: aws
@@ -56,6 +53,11 @@ resources:
 functions:
   get-user:
     handler: src/handlers/getUser.handler
+    package:
+      patterns:
+        - "src/handlers/getUser.js"
+        - "src/lib/*"
+        - "src/utils/*"
     events:
       - http:
           path: users/{id}
@@ -63,6 +65,11 @@ functions:
 
   get-users:
     handler: src/handlers/getUsers.handler
+    package:
+      patterns:
+        - "src/handlers/getUsers.js"
+        - "src/lib/*"
+        - "src/utils/*"
     events:
       - http:
           path: users
@@ -70,6 +77,11 @@ functions:
 
   create-user:
     handler: src/handlers/createUser.handler
+    package:
+      patterns:
+        - "src/handlers/createUser.js"
+        - "src/lib/*"
+        - "src/utils/*"
     events:
       - http:
           path: users
@@ -77,6 +89,11 @@ functions:
   
   update-user:
     handler: src/handlers/updateUser.handler
+    package:
+      patterns:
+        - "src/handlers/updateUser.js"
+        - "src/lib/*"
+        - "src/utils/*"
     events:
       - http:
           path: users/{id}
@@ -84,6 +101,11 @@ functions:
 
   delete-user:
     handler: src/handlers/deleteUser.handler
+    package:
+      patterns:
+        - "src/handlers/deleteUser.js"
+        - "src/lib/*"
+        - "src/utils/*"
     events:
       - http:
           path: users/{id}
