@@ -1,0 +1,21 @@
+{
+  "name": "hello-world",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "install:local": "npm i && pip install -r requirements.txt",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serverless": "^3.21.0",
+    "serverless-dynamodb": "^0.2.53",
+    "serverless-offline": "^13.5.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.577.0",
+    "yup": "^1.4.0"
+  }
+}

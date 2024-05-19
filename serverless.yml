@@ -1,0 +1,90 @@
+service: crud-serverless-aws
+
+package:
+  individually: true
+  patterns:
+    - "!.dynamodb"
+    - "!.serverless"
+    - "!local-seeders"
+    - "!.gitignore"
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: 'dynamodb:*'
+          Resource: !GetAtt usersDb.Arn
+
+plugins:
+  - serverless-offline
+  - serverless-dynamodb
+
+custom:
+  serverless-dynamodb:
+    start:
+      port: 8000
+      docker: false
+      inMemory: true
+      migrate: true
+      seed: true
+
+    seed:
+      users:
+        sources:
+          - table: usersTable
+            sources: ['./local-seeders/users.json']
+
+resources:
+  Resources:
+    usersDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+functions:
+  get-user:
+    handler: src/handlers/getUser.handler
+    events:
+      - http:
+          path: users/{id}
+          method: GET
+
+  get-users:
+    handler: src/handlers/getUsers.handler
+    events:
+      - http:
+          path: users
+          method: GET
+
+  create-user:
+    handler: src/handlers/createUser.handler
+    events:
+      - http:
+          path: users
+          method: POST
+  
+  update-user:
+    handler: src/handlers/updateUser.handler
+    events:
+      - http:
+          path: users/{id}
+          method: PUT
+
+  delete-user:
+    handler: src/handlers/deleteUser.handler
+    events:
+      - http:
+          path: users/{id}
+          method: DELETE
