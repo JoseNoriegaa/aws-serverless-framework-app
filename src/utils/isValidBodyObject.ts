@@ -1,5 +1,5 @@
-function isValidBodyObject(item) {
+function isValidBodyObject(item: undefined | null | object) {
   return !item || typeof item !== 'object' || Array.isArray(item) || (Object.keys(item).length === 0) ? false : true;
 }
 
-module.exports = { isValidBodyObject };
+export default isValidBodyObject;

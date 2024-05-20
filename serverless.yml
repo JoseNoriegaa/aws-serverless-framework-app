@@ -1,9 +1,9 @@
-service: crud-serverless-aws
+service: serverless-framework-aws
 
 package:
   individually: true
   patterns:
-    - "!**/**"
+    - "**/**"
 
 provider:
   name: aws
@@ -16,6 +16,7 @@ provider:
           Resource: !GetAtt usersDb.Arn
 
 plugins:
+  - serverless-plugin-typescript
   - serverless-offline
   - serverless-dynamodb
 
@@ -52,60 +53,69 @@ resources:
 
 functions:
   get-user:
-    handler: src/handlers/getUser.handler
+    handler: src/functions/get-user/index.handler
+    description: Returns the information of a single user
     package:
       patterns:
-        - "src/handlers/getUser.js"
-        - "src/lib/*"
-        - "src/utils/*"
+        - "src/functions/get-user"
+        - "src/lib"
+        - "src/constants.ts"
     events:
       - http:
           path: users/{id}
           method: GET
 
   get-users:
-    handler: src/handlers/getUsers.handler
+    handler: src/functions/get-users/index.handler
+    description: Returns a list of users
     package:
       patterns:
-        - "src/handlers/getUsers.js"
-        - "src/lib/*"
-        - "src/utils/*"
+        - "src/functions/get-user"
+        - "src/lib"
+        - "src/constants.ts"
+        - "src/utils/unwrapTypes.ts"
     events:
       - http:
           path: users
           method: GET
 
   create-user:
-    handler: src/handlers/createUser.handler
+    handler: src/functions/create-user/index.handler
+    description: Allows to register a new user into the application
     package:
       patterns:
-        - "src/handlers/createUser.js"
-        - "src/lib/*"
-        - "src/utils/*"
+        - "src/functions/get-user"
+        - "src/lib"
+        - "src/constants.ts"
+        - "src/utils/unwrapTypes.ts"
     events:
       - http:
           path: users
           method: POST
   
   update-user:
-    handler: src/handlers/updateUser.handler
+    handler: src/functions/update-user/index.handler
+    description: Allows to update a user record
     package:
       patterns:
-        - "src/handlers/updateUser.js"
-        - "src/lib/*"
-        - "src/utils/*"
+        - "src/functions/get-user"
+        - "src/lib"
+        - "src/constants.ts"
+        - "src/utils"
     events:
       - http:
           path: users/{id}
           method: PUT
 
   delete-user:
-    handler: src/handlers/deleteUser.handler
+    handler: src/functions/delete-user/index.handler
+    description: Allows to delete a user record
     package:
       patterns:
-        - "src/handlers/deleteUser.js"
-        - "src/lib/*"
-        - "src/utils/*"
+        - "src/functions/get-user"
+        - "src/lib"
+        - "src/constants.ts"
+        - "src/utils/unwrapTypes.ts"
     events:
       - http:
           path: users/{id}
