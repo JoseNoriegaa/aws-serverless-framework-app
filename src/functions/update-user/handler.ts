@@ -1,12 +1,13 @@
 // External dependencies
-const yup = require('yup');
+import { PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import * as yup from 'yup';
 
 // Internal dependencies
-const { formatError } = require('../lib/yup');
-const { unwrapTypes } = require('../utils/unwrapTypes');
-const { isValidBodyObject } = require('../utils/isValidBodyObject');
-const { PutItemCommand, QueryCommand } = require('@aws-sdk/client-dynamodb');
-const dynamoDB = require('../lib/dbclient');
+import dynamodb from '../../lib/dynamodb';
+import type { IEvent } from '../../types/api-gateway';
+import isValidBodyObject from '../../utils/isValidBodyObject';
+import unwrapTypes from '../../utils/unwrapTypes';
+import formatYupError from '../../utils/yup';
 
 // Constants
 const SCHEMA = yup.object({
@@ -14,10 +15,10 @@ const SCHEMA = yup.object({
   lastName: yup.string().min(2).required(),
 }).required();
 
-const handler = async (event, context) => {
+const handler = async (event: IEvent<{ id: string }>) => {
   const userId = event.pathParameters.id;
 
-  let body = JSON.parse(event.body);
+  let body = JSON.parse(event.body!);
   if (!isValidBodyObject(body)) {
     return {
       statusCode: 400,
@@ -34,7 +35,7 @@ const handler = async (event, context) => {
     console.log(error);
     return {
       statusCode: 400,
-      body: JSON.stringify(formatError(error)),
+      body: JSON.stringify(formatYupError(error as yup.ValidationError)),
     };
   }
 
@@ -47,7 +48,7 @@ const handler = async (event, context) => {
     TableName: "usersTable",
   });
   
-  const response = await dynamoDB.send(findCommand);
+  const response = await dynamodb.send(findCommand);
 
   const [item] = response.Items || [];
   if (!item) {
@@ -75,7 +76,7 @@ const handler = async (event, context) => {
     Item: newItem,
   });
 
-  await dynamoDB.send(command);
+  await dynamodb.send(command);
   
   return {
     statusCode: 200,
@@ -83,4 +84,4 @@ const handler = async (event, context) => {
   };
 };
 
-module.exports = { handler };
+export default handler;

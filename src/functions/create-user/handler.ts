@@ -1,14 +1,15 @@
-// Built-in dependencies
-const crypto = require('crypto');
 
 // External dependencies
-const { PutItemCommand } = require('@aws-sdk/client-dynamodb');
-const yup = require('yup');
+import { PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { APIGatewayProxyResultV2 } from "aws-lambda";
+import Crypto from 'crypto';
+import * as yup from 'yup';
 
 // Internal dependencies
-const { formatError } = require('../lib/yup');
-const dynamoDB = require('../lib/dbclient');
-const { unwrapTypes } = require('../utils/unwrapTypes');
+import dynamodb from "../../lib/dynamodb";
+import { IEvent } from "../../types/api-gateway";
+import unwrapTypes from "../../utils/unwrapTypes";
+import formatYupError from "../../utils/yup";
 
 // Constants
 const SCHEMA = yup.object({
@@ -16,24 +17,25 @@ const SCHEMA = yup.object({
   lastName: yup.string().required().min(2),
 }).required();
 
-const handler = async (event, context) => {
+const handler = async (event: IEvent): Promise<APIGatewayProxyResultV2> => {
   let body;
+
   try {
-    console.log(JSON.parse(event.body));
-    body = await SCHEMA.validate(JSON.parse(event.body), {
+    body = await SCHEMA.validate(JSON.parse(event.body!), {
       abortEarly: false,
       strict: true,
     });
   } catch (error) {
     return {
       statusCode: 400,
-      body: JSON.stringify(formatError(error)),
+      body: JSON.stringify(formatYupError(error as yup.ValidationError)),
     };
   }
 
+  
   const timestamp = new Date().toISOString();
   
-  const pk = crypto.randomUUID();
+  const pk = Crypto.randomUUID();
   const user = {
     pk: {
       S: pk,
@@ -57,12 +59,12 @@ const handler = async (event, context) => {
     Item: user,
   });
 
-  await dynamoDB.send(command);
+  await dynamodb.send(command);
 
   return {
-    statusCode: 200,
+    statusCode: 201,
     body: JSON.stringify(unwrapTypes(user))
   };
 };
 
-module.exports = { handler };
+export default handler;

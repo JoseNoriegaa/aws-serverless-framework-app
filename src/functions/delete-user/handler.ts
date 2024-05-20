@@ -1,12 +1,13 @@
 // External dependencies
-const { QueryCommand, DeleteItemCommand } = require('@aws-sdk/client-dynamodb');
+import { DeleteItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
 
 // Internal dependencies
-const { unwrapTypes } = require('../utils/unwrapTypes');
-const dynamoDB = require('../lib/dbclient');
+import dynamodb from "../../lib/dynamodb";
+import type { IEvent } from "../../types/api-gateway";
+import type { IUserModel, QueryResult } from "../../types/dynamodb";
+import unwrapTypes from "../../utils/unwrapTypes";
 
-
-const handler = async (event, context) => {
+const handler = async (event: IEvent<{ id: string }>) => {
   const userId = event.pathParameters.id;
 
   const findCommand = new QueryCommand({
@@ -18,7 +19,7 @@ const handler = async (event, context) => {
     TableName: "usersTable",
   });
   
-  const findResponse = await dynamoDB.send(findCommand);
+  const findResponse = (await dynamodb.send(findCommand)) as QueryResult<IUserModel>;
 
   const [item] = findResponse.Items || [];
   if (!item) {
@@ -34,7 +35,7 @@ const handler = async (event, context) => {
     ReturnValues: 'NONE',
   });
 
-  await dynamoDB.send(command);
+  await dynamodb.send(command);
 
   return {
     statusCode: 200,
@@ -42,4 +43,4 @@ const handler = async (event, context) => {
   };
 };
 
-module.exports = { handler };
+export default handler;
