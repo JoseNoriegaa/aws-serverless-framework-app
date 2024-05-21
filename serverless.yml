@@ -3,7 +3,11 @@ service: serverless-framework-aws
 package:
   individually: true
   patterns:
-    - "**/**"
+    - "!*/**"
+    - "!eslint.config.mjs"
+    - "src/constants.js"
+    - "src/lib/dynamodb.js"
+    - "src/utils/unwrapTypes.js"
 
 provider:
   name: aws
@@ -28,13 +32,11 @@ custom:
       inMemory: true
       migrate: true
       seed: true
-
     seed:
       users:
         sources:
           - table: usersTable
             sources: ['./local-seeders/users.json']
-
 resources:
   Resources:
     usersDb:
@@ -57,66 +59,76 @@ functions:
     description: Returns the information of a single user
     package:
       patterns:
-        - "src/functions/get-user"
-        - "src/lib"
-        - "src/constants.ts"
+        - "src/functions/get-user/*"
     events:
       - http:
           path: users/{id}
           method: GET
+          request:
+            parameters:
+              paths:
+                id: true
 
   get-users:
     handler: src/functions/get-users/index.handler
     description: Returns a list of users
     package:
       patterns:
-        - "src/functions/get-user"
-        - "src/lib"
-        - "src/constants.ts"
-        - "src/utils/unwrapTypes.ts"
+        - "src/functions/get-users/*"
     events:
       - http:
           path: users
           method: GET
+          request:
+            parameters:
+              querystrings:
+                lastKey: false
 
   create-user:
     handler: src/functions/create-user/index.handler
     description: Allows to register a new user into the application
     package:
       patterns:
-        - "src/functions/get-user"
-        - "src/lib"
-        - "src/constants.ts"
-        - "src/utils/unwrapTypes.ts"
+        - "src/functions/create-user/*"
     events:
       - http:
           path: users
           method: POST
+          request:
+            schemas:
+              application/json: ${file(src/schemas/user.json)}
   
   update-user:
     handler: src/functions/update-user/index.handler
     description: Allows to update a user record
     package:
       patterns:
-        - "src/functions/get-user"
-        - "src/lib"
-        - "src/constants.ts"
-        - "src/utils"
+        - "src/functions/update-user/*"
     events:
       - http:
           path: users/{id}
           method: PUT
+          request:
+            parameters:
+              paths:
+                id: true
+            schemas:
+              application/json:
+                schema: ${file(src/schemas/user.json)}
+                name: PostCreateModel
+                description: 'Validation model for creating users'
 
   delete-user:
     handler: src/functions/delete-user/index.handler
     description: Allows to delete a user record
     package:
       patterns:
-        - "src/functions/get-user"
-        - "src/lib"
-        - "src/constants.ts"
-        - "src/utils/unwrapTypes.ts"
+        - "src/functions/delete-user/*"
     events:
       - http:
           path: users/{id}
           method: DELETE
+          request:
+            parameters:
+              paths:
+                id: true

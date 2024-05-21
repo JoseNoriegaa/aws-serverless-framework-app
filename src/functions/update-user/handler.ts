@@ -1,43 +1,20 @@
 // External dependencies
 import { PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
-import * as yup from 'yup';
 
 // Internal dependencies
 import dynamodb from '../../lib/dynamodb';
 import type { IEvent } from '../../types/api-gateway';
-import isValidBodyObject from '../../utils/isValidBodyObject';
 import unwrapTypes from '../../utils/unwrapTypes';
-import formatYupError from '../../utils/yup';
 
-// Constants
-const SCHEMA = yup.object({
-  firstName: yup.string().min(2).required(),
-  lastName: yup.string().min(2).required(),
-}).required();
+// Types & Interfaces
+interface IBody {
+  firstName: string;
+  lastName: string;
+}
 
 const handler = async (event: IEvent<{ id: string }>) => {
   const userId = event.pathParameters.id;
-
-  let body = JSON.parse(event.body!);
-  if (!isValidBodyObject(body)) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ detail: 'No data was provided' })
-    }
-  }
-  
-  try {
-    body = await SCHEMA.validate(body, {
-      abortEarly: false,
-      strict: true,
-    });
-  } catch (error) {
-    console.log(error);
-    return {
-      statusCode: 400,
-      body: JSON.stringify(formatYupError(error as yup.ValidationError)),
-    };
-  }
+  const body = JSON.parse(event.body!) as IBody;
 
   const findCommand = new QueryCommand({
     KeyConditionExpression: "pk = :pk",

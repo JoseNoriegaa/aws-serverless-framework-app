@@ -6,7 +6,7 @@ import type { APIGatewayProxyResultV2 } from "aws-lambda";
 import { PAGINATION_SIZE } from "../../constants";
 import dynamodb from "../../lib/dynamodb";
 import type { IEvent } from '../../types/api-gateway';
-import { IUserModel, Paginator } from "../../types/dynamodb";
+import type { IPaginator,IUserModel } from "../../types/dynamodb";
 import unwrapTypes from "../../utils/unwrapTypes";
 
 const handler = async (event: IEvent<never, { lastKey?: string }>): Promise<APIGatewayProxyResultV2> => {
@@ -19,7 +19,7 @@ const handler = async (event: IEvent<never, { lastKey?: string }>): Promise<APIG
   }, {
     TableName: 'usersTable',
     ProjectionExpression: 'pk,firstName,lastName,createdAt,updatedAt',
-  }) as Paginator<IUserModel>;
+  }) as IPaginator<IUserModel>;
   
   const page = await paginator.next();
   await paginator.return(undefined);

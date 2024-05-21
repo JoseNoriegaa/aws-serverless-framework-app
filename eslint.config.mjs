@@ -27,4 +27,12 @@ export default [
       "simple-import-sort/exports": "error",
     },
   },
+  {
+    rules: {
+      "@typescript-eslint/consistent-type-imports": ["error", {
+        prefer: 'type-imports',
+        fixStyle: 'separate-type-imports',
+      }]
+    }
+  }
 ];

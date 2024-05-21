@@ -4,7 +4,7 @@ import { DeleteItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
 // Internal dependencies
 import dynamodb from "../../lib/dynamodb";
 import type { IEvent } from "../../types/api-gateway";
-import type { IUserModel, QueryResult } from "../../types/dynamodb";
+import type { IQueryResult,IUserModel } from "../../types/dynamodb";
 import unwrapTypes from "../../utils/unwrapTypes";
 
 const handler = async (event: IEvent<{ id: string }>) => {
@@ -19,7 +19,7 @@ const handler = async (event: IEvent<{ id: string }>) => {
     TableName: "usersTable",
   });
   
-  const findResponse = (await dynamodb.send(findCommand)) as QueryResult<IUserModel>;
+  const findResponse = (await dynamodb.send(findCommand)) as IQueryResult<IUserModel>;
 
   const [item] = findResponse.Items || [];
   if (!item) {

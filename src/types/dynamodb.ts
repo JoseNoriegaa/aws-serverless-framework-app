@@ -9,22 +9,22 @@ interface IUserModel extends Record<string, AttributeValue> {
   updatedAt: { S: string };
 }
 
-type ScanResult<T = unknown> = Omit<ScanCommandOutput, 'Items' | 'LastEvaluatedKey'> & {
+type IScanResult<T = unknown> = Omit<ScanCommandOutput, 'Items' | 'LastEvaluatedKey'> & {
   Items?: T[];
   LastEvaluatedKey?: { pk: { S: string } };
 }
 
-type QueryResult<
+type IQueryResult<
   T extends Record<string, AttributeValue> = never
 > = Omit<QueryOutput, 'Items'> & {
   Items?: T[]
 }
 
-type Paginator<T> = AsyncGenerator<ScanResult<T>, undefined, undefined>;
+type IPaginator<T> = AsyncGenerator<IScanResult<T>, undefined, undefined>;
 
 export type {
+  IPaginator,
+  IQueryResult,
+  IScanResult,
   IUserModel,
-  Paginator,
-  QueryResult,
-  ScanResult,
 }
