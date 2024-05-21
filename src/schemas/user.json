@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft-04/schema#",
+  "title": "User",
+  "description": "A user record",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "description": "The user's first name",
+      "type": "string",
+      "minLength": 2
+    },
+    "lastName": {
+      "description": "The user's last name",
+      "type": "string",
+      "minLength": 2
+    }
+  },
+  "required": ["firstName", "lastName"]
+}

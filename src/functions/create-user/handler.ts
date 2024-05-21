@@ -1,41 +1,27 @@
 
 // External dependencies
 import { PutItemCommand } from "@aws-sdk/client-dynamodb";
-import { APIGatewayProxyResultV2 } from "aws-lambda";
-import Crypto from 'crypto';
-import * as yup from 'yup';
+import type { APIGatewayProxyResultV2 } from "aws-lambda";
+import { randomUUID } from 'crypto';
 
 // Internal dependencies
 import dynamodb from "../../lib/dynamodb";
-import { IEvent } from "../../types/api-gateway";
+import type { IEvent } from "../../types/api-gateway";
 import unwrapTypes from "../../utils/unwrapTypes";
-import formatYupError from "../../utils/yup";
+
+// Types & Interfaces
+interface IBody {
+  firstName: string;
+  lastName: string;
+}
 
 // Constants
-const SCHEMA = yup.object({
-  firstName: yup.string().required().min(2),
-  lastName: yup.string().required().min(2),
-}).required();
-
 const handler = async (event: IEvent): Promise<APIGatewayProxyResultV2> => {
-  let body;
-
-  try {
-    body = await SCHEMA.validate(JSON.parse(event.body!), {
-      abortEarly: false,
-      strict: true,
-    });
-  } catch (error) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify(formatYupError(error as yup.ValidationError)),
-    };
-  }
-
+  const body = JSON.parse(event.body!) as IBody;
   
   const timestamp = new Date().toISOString();
   
-  const pk = Crypto.randomUUID();
+  const pk = randomUUID();
   const user = {
     pk: {
       S: pk,
