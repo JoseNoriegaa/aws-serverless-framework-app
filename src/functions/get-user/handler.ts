@@ -1,28 +1,24 @@
 // External dependencies
-import { QueryCommand } from "@aws-sdk/client-dynamodb";
+import { GetItemCommand } from "@aws-sdk/client-dynamodb";
 import type { APIGatewayProxyResultV2 } from "aws-lambda";
 
 // Internal dependencies
 import dynamodb from "../../lib/dynamodb";
 import type { IEvent } from "../../types/api-gateway";
-import type { IQueryResult,IUserModel } from "../../types/dynamodb";
 import unwrapTypes from "../../utils/unwrapTypes";
 
 const handler = async (event: IEvent<{ id: string }>): Promise<APIGatewayProxyResultV2> => {
   const userId = event.pathParameters.id;
 
-  const command = new QueryCommand({
-    KeyConditionExpression: 'pk = :pk',
-    ExpressionAttributeValues: {
-      ':pk': { S: userId },
-    },
-    ProjectionExpression: 'pk,firstName,lastName,createdAt,updatedAt',
+  const command = new GetItemCommand({
     TableName: 'usersTable',
+    Key: { pk: { S: userId } },
+    AttributesToGet: ['pk', 'firstName', 'lastName', 'createdAt', 'updatedAt'],
   });
 
-  const response = await dynamodb.send(command) as IQueryResult<IUserModel>;
+  const response = await dynamodb.send(command);
 
-  const [item] = (response.Items || []);
+  const item = response.Item;
 
   if (!item) {
     return {

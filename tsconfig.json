@@ -11,6 +11,7 @@
     "rootDir": "./",
     "removeComments": true,
     "resolveJsonModule": false,
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "typeRoots": ["node_modules/@types", "index.d.ts"]
   }
 }
