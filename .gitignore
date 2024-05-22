@@ -194,3 +194,6 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/macos
 
 .build
+
+.s3/*
+!.s3/.gitkeep

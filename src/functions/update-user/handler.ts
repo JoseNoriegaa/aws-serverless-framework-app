@@ -1,5 +1,5 @@
 // External dependencies
-import { PutItemCommand, QueryCommand } from '@aws-sdk/client-dynamodb';
+import { GetItemCommand, PutItemCommand } from '@aws-sdk/client-dynamodb';
 
 // Internal dependencies
 import dynamodb from '../../lib/dynamodb';
@@ -16,18 +16,15 @@ const handler = async (event: IEvent<{ id: string }>) => {
   const userId = event.pathParameters.id;
   const body = JSON.parse(event.body!) as IBody;
 
-  const findCommand = new QueryCommand({
-    KeyConditionExpression: "pk = :pk",
-    ExpressionAttributeValues: {
-      ":pk": { S: userId },
-    },
-    ProjectionExpression: 'createdAt',
-    TableName: "usersTable",
+  const findCommand = new GetItemCommand({
+    TableName: 'usersTable',
+    Key: { pk: { S: userId } },
+    AttributesToGet: ['createdAt'],
   });
   
   const response = await dynamodb.send(findCommand);
 
-  const [item] = response.Items || [];
+  const item = response.Item;
   if (!item) {
     return {
       statusCode: 404,

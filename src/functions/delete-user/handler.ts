@@ -1,27 +1,23 @@
 // External dependencies
-import { DeleteItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
+import { DeleteItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
 // Internal dependencies
 import dynamodb from "../../lib/dynamodb";
 import type { IEvent } from "../../types/api-gateway";
-import type { IQueryResult,IUserModel } from "../../types/dynamodb";
 import unwrapTypes from "../../utils/unwrapTypes";
 
 const handler = async (event: IEvent<{ id: string }>) => {
   const userId = event.pathParameters.id;
 
-  const findCommand = new QueryCommand({
-    KeyConditionExpression: "pk = :pk",
-    ExpressionAttributeValues: {
-      ":pk": { S: userId },
-    },
-    ProjectionExpression: 'pk,firstName,lastName,createdAt,updatedAt',
-    TableName: "usersTable",
+  const findCommand = new GetItemCommand({
+    TableName: 'usersTable',
+    Key: { pk: { S: userId } },
+    AttributesToGet: ['pk','firstName','lastName','createdAt','updatedAt'],
   });
   
-  const findResponse = (await dynamodb.send(findCommand)) as IQueryResult<IUserModel>;
+  const findResponse = await dynamodb.send(findCommand);
 
-  const [item] = findResponse.Items || [];
+  const item = findResponse.Item;
   if (!item) {
     return {
       statusCode: 404,

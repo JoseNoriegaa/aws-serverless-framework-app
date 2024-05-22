@@ -1,4 +1,4 @@
-service: serverless-framework-aws
+service: serverless-framework-app
 
 package:
   individually: true
@@ -16,13 +16,24 @@ provider:
     role:
       statements:
         - Effect: Allow
-          Action: 'dynamodb:*'
-          Resource: !GetAtt usersDb.Arn
+          Action:
+            - 'dynamodb:Scan'
+            - 'dynamodb:GetItem'
+            - 'dynamodb:PutItem'
+            - 'dynamodb:UpdateItem'
+            - 'dynamodb:DeleteItem'
+          Resource: !GetAtt DynamoDB.Arn
+        - Effect: Allow
+          Action:
+            - 's3:GetObject'
+            - 's3:PutObject'
+          Resource: !Sub ${S3Bucket.Arn}/*
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
   - serverless-dynamodb
+  - serverless-s3-local
 
 custom:
   serverless-dynamodb:
@@ -37,9 +48,13 @@ custom:
         sources:
           - table: usersTable
             sources: ['./local-seeders/users.json']
+  s3:
+    host: localhost
+    directory: .s3
+
 resources:
   Resources:
-    usersDb:
+    DynamoDB:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: usersTable
@@ -52,6 +67,31 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        PublicAccessBlockConfiguration:
+          RestrictPublicBuckets: false
+          IgnorePublicAcls: false
+          BlockPublicPolicy: false
+          BlockPublicAcls: false
+        BucketName: !Sub ${self:service}-bucket-1-${AWS::Region}-${AWS::AccountId}-${sls:stage,'dev'}
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerPreferred
+    S3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3Bucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: statement1
+              Resource: !Sub ${S3Bucket.Arn}/*
+              Effect: "Allow"
+              Principal: "*"
+              Action:
+                - "s3:GetObject"
 
 functions:
   get-user:
