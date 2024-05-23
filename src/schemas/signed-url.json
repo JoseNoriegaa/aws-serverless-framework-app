@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft-04/schema#",
+  "title": "Signed image url",
+  "description": "Validates an image filename to generate a signed s3 url",
+  "type": "object",
+  "properties": {
+    "filename": {
+      "type": "string",
+      "description": "filename of the image to be upload",
+      "pattern": "^[a-z-]{1,}\\.[a-z-]{3,4}"
+    }
+  },
+  "required": ["filename"]
+}
