@@ -51,6 +51,7 @@ custom:
   s3:
     host: localhost
     directory: .s3
+    allowMismatchedSignatures: true
 
 resources:
   Resources:
@@ -172,3 +173,21 @@ functions:
             parameters:
               paths:
                 id: true
+  
+  create-signed-upload-url:
+    handler: src/functions/create-signed-upload-url/index.handler
+    description: Returns a signed S3 URL to upload an image
+    package:
+      patterns:
+        - "src/functions/create-signed-upload-url/*"
+        - "src/lib/s3.js"
+        - "!src/lib/dynamodb.js"
+    environment:
+      AWS_S3_BUCKET_NAME: !Ref S3Bucket
+    events:
+      - http:
+          path: signed-url
+          method: POST
+          request:
+            schemas:
+              application/json: ${file(src/schemas/signed-url.json)}
