@@ -12,6 +12,7 @@
     "removeComments": true,
     "resolveJsonModule": false,
     "module": "CommonJS",
-    "typeRoots": ["node_modules/@types", "index.d.ts"]
+    "typeRoots": ["node_modules/@types", "index.d.ts"],
+    "esModuleInterop": true
   }
 }
