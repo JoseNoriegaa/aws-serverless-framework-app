@@ -46,7 +46,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: nodejs-artifact
-          path: app/
+          path: layer-artifacts/
 
       - name: SLS Deploy
         run: 'npx sls deploy'

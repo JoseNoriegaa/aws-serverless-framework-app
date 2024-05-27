@@ -35,73 +35,13 @@ plugins:
   - serverless-dynamodb
   - serverless-s3-local
 
-custom:
-  aws-bucket-name: serverless-framework-app-janr-test-1-dev
-  serverless-dynamodb:
-    start:
-      port: 8000
-      docker: false
-      inMemory: true
-      migrate: true
-      seed: true
-    seed:
-      users:
-        sources:
-          - table: usersTable
-            sources: ['./local-seeders/users.json']
-  s3:
-    host: localhost
-    directory: .s3
-    allowMismatchedSignatures: true
-
-resources:
-  Resources:
-    DynamoDB:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: usersTable
-        AttributeDefinitions:
-          - AttributeName: pk
-            AttributeType: S
-        KeySchema:
-          - AttributeName: pk
-            KeyType: HASH
-        ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
-    S3Bucket:
-      Type: AWS::S3::Bucket
-      Properties:
-        PublicAccessBlockConfiguration:
-          RestrictPublicBuckets: false
-          IgnorePublicAcls: false
-          BlockPublicPolicy: false
-          BlockPublicAcls: false
-        BucketName: ${self:custom.aws-bucket-name}
-        OwnershipControls:
-          Rules:
-            - ObjectOwnership: BucketOwnerPreferred
-    S3BucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      Properties:
-        Bucket: !Ref S3Bucket
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Sid: statement1
-              Resource: !Sub ${S3Bucket.Arn}/*
-              Effect: "Allow"
-              Principal: "*"
-              Action:
-                - "s3:GetObject"
-
 layers:
   baseLayer:
     name: "nodejs-sls-app-layer"
     compatibleRuntimes:
       - ${self:provider.runtime}
     package:
-      artifact: app/nodejs.zip
+      artifact: layer-artifacts/nodejs.zip
 
 functions:
   get-user:
@@ -217,3 +157,63 @@ functions:
           existing: true
           rules:
             - prefix: upload/
+
+custom:
+  aws-bucket-name: serverless-framework-app-janr-test-1-dev
+  serverless-dynamodb:
+    start:
+      port: 8000
+      docker: false
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      users:
+        sources:
+          - table: usersTable
+            sources: ['./local-seeders/users.json']
+  s3:
+    host: localhost
+    directory: .s3
+    allowMismatchedSignatures: true
+
+resources:
+  Resources:
+    DynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        PublicAccessBlockConfiguration:
+          RestrictPublicBuckets: false
+          IgnorePublicAcls: false
+          BlockPublicPolicy: false
+          BlockPublicAcls: false
+        BucketName: ${self:custom.aws-bucket-name}
+        OwnershipControls:
+          Rules:
+            - ObjectOwnership: BucketOwnerPreferred
+    S3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3Bucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: statement1
+              Resource: !Sub ${S3Bucket.Arn}/*
+              Effect: "Allow"
+              Principal: "*"
+              Action:
+                - "s3:GetObject"
