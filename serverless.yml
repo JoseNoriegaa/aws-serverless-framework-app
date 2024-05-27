@@ -28,6 +28,9 @@ provider:
             - 's3:GetObject'
             - 's3:PutObject'
           Resource: !Sub ${S3Bucket.Arn}/*
+  apiGateway:
+    apiKeys:
+      - serverless-framework-app
 
 plugins:
   - serverless-plugin-typescript
@@ -52,6 +55,7 @@ functions:
         - "src/functions/get-user/*"
     events:
       - http:
+          private: true
           path: users/{id}
           method: GET
           request:
