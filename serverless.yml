@@ -144,7 +144,7 @@ functions:
   thumbnail-generator:
     handler: src/functions/thumbnail-generator/index.handler
     layers:
-      - !Ref NodeJSLambdaLayer
+      - { Ref: NodejsLambdaLayer }
     package:
       patterns:
         - "!src/lib/dynamodb.js"
