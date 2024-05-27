@@ -95,6 +95,14 @@ resources:
               Action:
                 - "s3:GetObject"
 
+layers:
+  baseLayer:
+    name: "nodejs-sls-app-layer"
+    compatibleRuntimes:
+      - ${self:provider.runtime}
+    package:
+      artifact: app/nodejs.zip
+
 functions:
   get-user:
     handler: src/functions/get-user/index.handler
@@ -194,21 +202,14 @@ functions:
               application/json: ${file(src/schemas/signed-url.json)}
   thumbnail-generator:
     handler: src/functions/thumbnail-generator/index.handler
+    layers:
+      - { Ref: baseLayer }
     package:
       patterns:
-        - "node_modules/**"
-        - "!node_modules/@eslint"
-        - "!node_modules/@types"
-        - "!node_modules/eslint"
-        - "!node_modules/eslint-plugin-simple-import-sort"
-        - "!node_modules/globals"
-        - "!node_modules/serverless"
-        - "!node_modules/serverless-*"
-        - "!node_modules/typescript"
-        - "!node_modules/typescript-eslint"
         - "!src/lib/dynamodb.js"
         - "src/functions/thumbnail-generator/*"
         - "src/lib/s3.js"
+        - "nodejs.zip"
     events:
       - s3:
           bucket: ${self:custom.aws-bucket-name}
