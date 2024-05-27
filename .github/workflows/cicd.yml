@@ -13,11 +13,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - run: |
-        npm i --omit=dev
-        mkdir nodejs
-        mv node_modules nodejs/node_modules
-        apt update -y && apt install zip -y
-        zip -r nodejs.zip nodejs
+          npm i --omit=dev
+          mkdir nodejs
+          mv node_modules nodejs/node_modules
+          apt update -y && apt install zip -y
+          zip -r nodejs.zip nodejs
 
       - uses: actions/upload-artifact@v4
         with:
