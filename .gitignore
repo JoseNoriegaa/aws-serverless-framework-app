@@ -197,3 +197,4 @@ Temporary Items
 
 .s3/*
 !.s3/.gitkeep
+layer-artifacts
