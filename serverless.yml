@@ -36,7 +36,7 @@ plugins:
   - serverless-s3-local
 
 layers:
-  baseLayer:
+  nodejs:
     name: "nodejs-sls-app-layer"
     compatibleRuntimes:
       - ${self:provider.runtime}
@@ -140,10 +140,11 @@ functions:
           request:
             schemas:
               application/json: ${file(src/schemas/signed-url.json)}
+
   thumbnail-generator:
     handler: src/functions/thumbnail-generator/index.handler
     layers:
-      - { Ref: baseLayer }
+      - !Ref NodeJSLambdaLayer
     package:
       patterns:
         - "!src/lib/dynamodb.js"
