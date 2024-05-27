@@ -131,6 +131,7 @@ functions:
         - "src/functions/create-signed-upload-url/*"
         - "src/lib/s3.js"
         - "!src/lib/dynamodb.js"
+        - "!src/utils/unwrapTypes.js"
     environment:
       AWS_S3_BUCKET_NAME: ${self:custom.aws-bucket-name}
     events:
@@ -148,6 +149,7 @@ functions:
     package:
       patterns:
         - "!src/lib/dynamodb.js"
+        - "!src/utils/unwrapTypes.js"
         - "src/functions/thumbnail-generator/*"
         - "src/lib/s3.js"
         - "nodejs.zip"
