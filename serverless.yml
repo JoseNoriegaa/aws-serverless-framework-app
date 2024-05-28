@@ -32,7 +32,7 @@ provider:
     apiKeys:
       - serverless-framework-app
   environment:
-    SECRET_KEY: ${ssm:/SECRET_KEY,SECRET_KEY}
+    SECRET_KEY: ${ssm:/SECRET_KEY}
 
 plugins:
   - serverless-plugin-typescript
