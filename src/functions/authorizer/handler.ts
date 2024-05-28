@@ -1,19 +1,15 @@
 // External dependencies
-import type { APIGatewayTokenAuthorizerEvent, APIGatewayTokenAuthorizerHandler } from "aws-lambda";
+import type { APIGatewayTokenAuthorizerEvent, AuthResponse } from "aws-lambda";
 
 // Internal dependencies
 import { SECRET_KEY } from "../../constants";
 
-const handler: APIGatewayTokenAuthorizerHandler = async (event: APIGatewayTokenAuthorizerEvent) => {
+const handler = async (event: APIGatewayTokenAuthorizerEvent): Promise<AuthResponse> => {
   const date = new Date();  
   const minutes = date.getMinutes();
   const hour = date.getHours();
 
-  const token = `Bearer ${SECRET_KEY}-${hour}-${minutes}`;
-
-  console.log(token);
-
-  if (event.authorizationToken === token) {
+  if (event.authorizationToken === `Bearer ${SECRET_KEY}-${hour}-${minutes}`) {
     return {
       principalId: 'anonymous',
       policyDocument: {
