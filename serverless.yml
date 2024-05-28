@@ -31,6 +31,8 @@ provider:
   apiGateway:
     apiKeys:
       - serverless-framework-app
+  environment:
+    SECRET_KEY: ${ssm:/SECRET_KEY,SECRET_KEY}
 
 plugins:
   - serverless-plugin-typescript
@@ -71,13 +73,13 @@ functions:
         - "src/functions/get-users/*"
     events:
       - http:
+          private: true
           path: users
           method: GET
           request:
             parameters:
               querystrings:
                 lastKey: false
-
   create-user:
     handler: src/functions/create-user/index.handler
     description: Allows to register a new user into the application
@@ -88,6 +90,9 @@ functions:
       - http:
           path: users
           method: POST
+          authorizer:
+            name: custom-authorizer
+            resultTtlInSeconds: 15
           request:
             schemas:
               application/json: ${file(src/schemas/user.json)}
@@ -102,6 +107,9 @@ functions:
       - http:
           path: users/{id}
           method: PUT
+          authorizer:
+            name: custom-authorizer
+            resultTtlInSeconds: 15
           request:
             parameters:
               paths:
@@ -122,6 +130,9 @@ functions:
       - http:
           path: users/{id}
           method: DELETE
+          authorizer:
+            name: custom-authorizer
+            resultTtlInSeconds: 15
           request:
             parameters:
               paths:
@@ -142,6 +153,9 @@ functions:
       - http:
           path: signed-url
           method: POST
+          authorizer:
+            name: custom-authorizer
+            resultTtlInSeconds: 15
           request:
             schemas:
               application/json: ${file(src/schemas/signed-url.json)}
@@ -164,6 +178,13 @@ functions:
           existing: true
           rules:
             - prefix: upload/
+
+  custom-authorizer:
+    handler: src/functions/authorizer/index.handler
+    package:
+      patterns:
+        - "!src/lib/dynamodb.js"
+        - "src/functions/authorizer/*"
 
 custom:
   aws-bucket-name: serverless-framework-app-janr-test-1-dev
