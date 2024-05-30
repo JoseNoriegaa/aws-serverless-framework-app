@@ -170,7 +170,6 @@ functions:
         - "!src/utils/unwrapTypes.js"
         - "src/functions/thumbnail-generator/*"
         - "src/lib/s3.js"
-        - "nodejs.zip"
     events:
       - s3:
           bucket: ${self:custom.aws-bucket-name}
@@ -194,6 +193,8 @@ custom:
         method: POST
         queueName: like-user-queue
         cors: true
+        requestParameters:
+          'integration.request.schemas.application/json': ${file(src/schemas/like-user.json)}
         response:
           template:
             success: |-
@@ -210,7 +211,7 @@ constructs:
       handler: src/functions/like-user/index.handler
       package:
         patterns:
-          - "!src/lib/*"
+          - "!src/utils/*"
           - "src/functions/like-user/*"
     extensions:
       queue:
