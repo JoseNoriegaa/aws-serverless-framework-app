@@ -194,7 +194,7 @@ custom:
         queueName: like-user-queue
         cors: true
         requestParameters:
-          'integration.request.schemas.application/json': ${file(src/schemas/like-user.json)}
+          'integration.request.schemas.application/json': ${file(src/schemas/user-like.json)}
         response:
           template:
             success: |-
