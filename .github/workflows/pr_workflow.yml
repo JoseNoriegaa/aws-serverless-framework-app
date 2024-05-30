@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - "!.github/*"
+      - "__tests__/*"
+      - "src/*"
 
 jobs:
   tests:
