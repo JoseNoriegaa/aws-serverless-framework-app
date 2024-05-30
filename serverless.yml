@@ -203,7 +203,7 @@ custom:
             serverError: |-
               { "message": "there was an error handling your request" }
 
-construct:
+constructs:
   sqs-queue:
     type: queue
     batchSize: 1
