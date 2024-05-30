@@ -16,8 +16,7 @@ describe('unwrapTypes', () => {
     const formattedObject = unwrapTypes(dynamoLikeResponse);
 
     expect(formattedObject).toStrictEqual({
-      // will fail
-      id: 1,
+      id: '1',
       fullName: 'John Doe',
       isActive: true
     });
