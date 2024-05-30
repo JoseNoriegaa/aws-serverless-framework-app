@@ -23,7 +23,6 @@
     "serverless-apigateway-service-proxy": "^2.2.1",
     "serverless-lift": "^1.28.1",
     "serverless-plugin-typescript": "2.1.1",
-    "serverless-s3-local": "^0.8.4",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.10.0"
   },
