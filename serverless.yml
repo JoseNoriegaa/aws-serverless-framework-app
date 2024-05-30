@@ -206,10 +206,8 @@ custom:
 constructs:
   sqs-queue:
     type: queue
-    batchSize: 1
     worker:
       handler: src/functions/like-user/index.handler
-      reservedConcurrency: 1
       package:
         patterns:
           - "!src/lib/*"
