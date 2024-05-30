@@ -1,6 +1,5 @@
 // External dependencies
 import type { AttributeValue } from '@aws-sdk/client-dynamodb';
-import { describe, expect, test } from 'vitest';
 
 // Internal dependencies
 import unwrapTypes from '../../../src/utils/unwrapTypes';

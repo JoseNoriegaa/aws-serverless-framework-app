@@ -1,6 +1,5 @@
 // External dependencies
 import { S3Client } from "@aws-sdk/client-s3";
-import { describe, expect, it } from "vitest";
 
 // Internal dependencies
 import s3 from "../../../src/lib/s3";

@@ -9,6 +9,9 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    globals: {
+      jest: true,
+    },
     ignores: [
       "node_modules",
       ".build",
@@ -32,7 +35,9 @@ export default [
       "@typescript-eslint/consistent-type-imports": ["error", {
         prefer: 'type-imports',
         fixStyle: 'separate-type-imports',
-      }]
+      }],
+      'semi': ['error', 'always'],
+      '@typescript-eslint/semi': ['error', 'always'],
     }
   }
 ];
