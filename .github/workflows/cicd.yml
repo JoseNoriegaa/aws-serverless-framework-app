@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "serverless.yml"
+      - "src/**"
 
 jobs:
   generate-artifacts:
