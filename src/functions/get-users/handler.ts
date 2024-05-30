@@ -20,21 +20,15 @@ const handler = async (event: IEvent<never, { lastKey?: string }>): Promise<APIG
     TableName: 'usersTable',
     ProjectionExpression: 'pk,firstName,lastName,createdAt,updatedAt',
   }) as IPaginator<IUserModel>;
-  
+
   const page = await paginator.next();
+  
   await paginator.return(undefined);
 
-  let lastKey;
-  if (page.done) {
-    lastKey = null;
-  } else if (page.value.LastEvaluatedKey) {
-    lastKey = unwrapTypes(page.value.LastEvaluatedKey).pk
-  }
-
-  const items = (page.value?.Items || []).map(unwrapTypes)
+  const items = (page.value?.Items || []).map(unwrapTypes);
 
   const response = {
-    lastKey,
+    lastKey: items[items.length - 1]?.pk,
     pageSize: PAGINATION_SIZE,
     count: items.length,
     items,
