@@ -213,7 +213,7 @@ constructs:
       package:
         patterns:
           - "!src/lib/*"
-          - "src/functions/like-user/index.handler"
+          - "src/functions/like-user/*"
     extensions:
       queue:
         Properties:
