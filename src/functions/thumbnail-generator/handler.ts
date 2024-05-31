@@ -51,12 +51,12 @@ const resizer = async (body: Uint8Array, size: number, bucket: string, key: stri
   }
 
   console.log(`Successfully resized ${bucket}/${key} and uploaded to ${bucket}/${resizedFilename}`);
-}
+};
 
 // Handler
 const handler = async (event: BucketEvent): Promise<void> => {
   const srcBucket = event.Records[0].s3.bucket.name;
-  const srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, ' '))
+  const srcKey = decodeURIComponent(event.Records[0].s3.object.key.replace(/\+/g, ' '));
   const typeMatch = srcKey.match(/\.([^.]*)$/);
   if (!typeMatch) {
     console.error('Could not determine the image type');
@@ -88,4 +88,5 @@ const handler = async (event: BucketEvent): Promise<void> => {
   await Promise.all(widths.map(width => resizer(byteArray, width, srcBucket, srcKey, imageType)));
 };
 
+export { resizer };
 export default handler;

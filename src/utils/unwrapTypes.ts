@@ -1,11 +1,10 @@
 // External dependencies
 import type { AttributeValue } from "@aws-sdk/client-dynamodb";
 
-// Types & Interfaces
-type UnwrapType<T> = {
-  [K in keyof T]: T[K][keyof T[K]]
-}
+// Internal dependencies
+import type { UnwrapType } from "../types/dynamodb";
 
+// Types & Interfaces
 type DynamoResultLike = Record<string, AttributeValue>;
 
 const unwrapTypes = <T extends DynamoResultLike>(item: T) => {
@@ -24,6 +23,6 @@ const unwrapTypes = <T extends DynamoResultLike>(item: T) => {
   }
 
   return output as UnwrapType<T>;
-}
+};
 
 export default unwrapTypes;

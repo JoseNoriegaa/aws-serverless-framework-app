@@ -11,7 +11,7 @@ type IEvent<
 > = Omit<APIGatewayProxyEventV2, 'queryStringParameters'> & {
   queryStringParameters: Query;
   pathParameters: Path;
-}
+};
 
 export type {
   IEvent,

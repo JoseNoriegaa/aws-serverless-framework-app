@@ -1,0 +1,4 @@
+process.env = {
+  AWS_S3_BUCKET_NAME: 'AWS_S3_BUCKET_NAME',
+  SECRET_KEY: 'SECRET_KEY',
+};

@@ -5,7 +5,7 @@ import tseslint from "typescript-eslint";
 
 
 export default [
-  {languageOptions: { globals: globals.node }},
+  {languageOptions: { globals: { ...globals.node, jest: true } } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -16,6 +16,7 @@ export default [
       ".dynamodb",
       ".github",
       "local-seeders",
+      ".serverless",
     ]
   },
   {
@@ -32,7 +33,9 @@ export default [
       "@typescript-eslint/consistent-type-imports": ["error", {
         prefer: 'type-imports',
         fixStyle: 'separate-type-imports',
-      }]
+      }],
+      'semi': ['error', 'always'],
+      '@typescript-eslint/semi': ['error', 'always'],
     }
   }
 ];
