@@ -19,7 +19,7 @@ const handler = async (event: IEvent<{ id: string }>) => {
   const findCommand = new GetItemCommand({
     TableName: 'usersTable',
     Key: { pk: { S: userId } },
-    AttributesToGet: ['createdAt'],
+    AttributesToGet: ['likes', 'createdAt'],
   });
   
   const response = await dynamodb.send(findCommand);

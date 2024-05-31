@@ -5,9 +5,9 @@ on:
     branches:
       - main
     paths:
-      - "!.github/*"
-      - "__tests__/*"
-      - "src/*"
+      - "!.github"
+      - "__tests__/**/*"
+      - "src/**/*"
 
 jobs:
   tests:

@@ -13,7 +13,7 @@ const handler = async (event: IEvent<{ id: string }>): Promise<APIGatewayProxyRe
   const command = new GetItemCommand({
     TableName: 'usersTable',
     Key: { pk: { S: userId } },
-    AttributesToGet: ['pk', 'firstName', 'lastName', 'createdAt', 'updatedAt'],
+    AttributesToGet: ['pk', 'firstName', 'lastName', 'likes', 'createdAt', 'updatedAt'],
   });
 
   const response = await dynamodb.send(command);

@@ -12,7 +12,7 @@ const handler = async (event: IEvent<{ id: string }>) => {
   const findCommand = new GetItemCommand({
     TableName: 'usersTable',
     Key: { pk: { S: userId } },
-    AttributesToGet: ['pk','firstName','lastName','createdAt','updatedAt'],
+    AttributesToGet: ['pk','firstName','lastName', 'likes', 'createdAt','updatedAt'],
   });
   
   const findResponse = await dynamodb.send(findCommand);

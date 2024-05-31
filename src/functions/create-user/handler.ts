@@ -32,6 +32,9 @@ const handler = async (event: IEvent): Promise<APIGatewayProxyResultV2> => {
     lastName: {
       S: body.lastName,
     },
+    likes: {
+      N: '0'
+    },
     createdAt: {
       S: timestamp,
     },
