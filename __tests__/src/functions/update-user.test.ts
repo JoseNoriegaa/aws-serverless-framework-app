@@ -53,6 +53,7 @@ describe('λ - update-user', () => {
     };
 
     const expectedItem = {
+      likes: { N: USERS_MOCK[0].likes.N },
       createdAt: { S: USERS_MOCK[0].createdAt.S },
       pk: { S: userId },
       firstName: {
@@ -67,7 +68,7 @@ describe('λ - update-user', () => {
     ddb
       .on(GetItemCommand)
       .resolves({
-        Item: { createdAt: USERS_MOCK[0].createdAt },
+        Item: { likes: USERS_MOCK[0].likes, createdAt: USERS_MOCK[0].createdAt },
       });
 
     const event = {
@@ -80,7 +81,7 @@ describe('λ - update-user', () => {
     expect(mockGetCommand).toHaveBeenCalledWith({
       Key: { pk: { S: userId }},
       TableName: 'usersTable',
-      AttributesToGet: ['createdAt'],
+      AttributesToGet: ['likes', 'createdAt'],
     });
 
     expect(mockPutCommand).toHaveBeenCalledWith(

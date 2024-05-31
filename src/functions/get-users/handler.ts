@@ -18,7 +18,7 @@ const handler = async (event: IEvent<never, { lastKey?: string }>): Promise<APIG
     startingToken: lastKeyQuery ? { pk: { S: lastKeyQuery } } : undefined,
   }, {
     TableName: 'usersTable',
-    ProjectionExpression: 'pk,firstName,lastName,createdAt,updatedAt',
+    ProjectionExpression: 'pk,firstName,lastName,likes,createdAt,updatedAt',
   }) as IPaginator<IUserModel>;
 
   const page = await paginator.next();

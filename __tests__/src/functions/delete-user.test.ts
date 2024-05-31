@@ -51,7 +51,7 @@ describe("λ - delete-user", () => {
 
     expect(mockCommand).toHaveBeenCalledWith(expect.objectContaining({
       Key: { pk: { S: userId } },
-      AttributesToGet: ['pk', 'firstName', 'lastName', 'createdAt', 'updatedAt'],
+      AttributesToGet: ['pk', 'firstName', 'lastName', 'likes', 'createdAt', 'updatedAt'],
     }));
 
     expect(response).toStrictEqual({

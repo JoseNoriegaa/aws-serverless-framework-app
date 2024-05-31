@@ -73,7 +73,7 @@ describe('λ - get-users', () => {
         startingToken: undefined,
       }, {
         TableName: 'usersTable',
-        ProjectionExpression: 'pk,firstName,lastName,createdAt,updatedAt',
+        ProjectionExpression: 'pk,firstName,lastName,likes,createdAt,updatedAt',
       }
     );
 
@@ -108,7 +108,7 @@ describe('λ - get-users', () => {
         startingToken: { pk: { S: event.queryStringParameters.lastKey }},
       }, {
         TableName: 'usersTable',
-        ProjectionExpression: 'pk,firstName,lastName,createdAt,updatedAt',
+        ProjectionExpression: 'pk,firstName,lastName,likes,createdAt,updatedAt',
       }
     );
 

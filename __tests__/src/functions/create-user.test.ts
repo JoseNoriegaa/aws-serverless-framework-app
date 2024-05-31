@@ -53,6 +53,7 @@ describe('λ - create-user', () => {
       pk: { S: '0-0-0-0-0' },
       firstName: { S: 'John' },
       lastName: { S: 'Doe' },
+      likes: { N: '0' },
       createdAt: { S: '2024-01-01T01:00:00.000Z' },
       updatedAt: { S: '2024-01-01T01:00:00.000Z' },
     };
