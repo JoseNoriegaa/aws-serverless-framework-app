@@ -1,5 +1,5 @@
 // External dependencies
-import { DynamoDBClient, GetItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { mockClient } from 'aws-sdk-client-mock';
 
 // Internal dependencies
@@ -17,7 +17,7 @@ describe('λ - get-user', () => {
     ddb.on(GetItemCommand).resolves({
       Item: USERS_MOCK[0],
     });
-  })
+  });
 
   test('given a valid user id, it should return the related user information', async () => {
     const event = {
@@ -45,5 +45,5 @@ describe('λ - get-user', () => {
       statusCode: 404,
       body: JSON.stringify({ detail: `User with ID 'unexpected-id' was not found.` }),
     });
-  })
+  });
 });

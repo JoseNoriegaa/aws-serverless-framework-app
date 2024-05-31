@@ -5,13 +5,10 @@ import tseslint from "typescript-eslint";
 
 
 export default [
-  {languageOptions: { globals: globals.node }},
+  {languageOptions: { globals: { ...globals.node, jest: true } } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    globals: {
-      jest: true,
-    },
     ignores: [
       "node_modules",
       ".build",
@@ -19,6 +16,7 @@ export default [
       ".dynamodb",
       ".github",
       "local-seeders",
+      ".serverless",
     ]
   },
   {

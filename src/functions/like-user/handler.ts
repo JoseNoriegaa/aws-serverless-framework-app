@@ -25,8 +25,7 @@ const handler = async (event: SQSEvent) => {
     ReturnValues: 'ALL_NEW'
   });
 
-  const response = await dynamodb.send(command);
-  console.log(response);
-}
+  await dynamodb.send(command);
+};
 
 export default handler;

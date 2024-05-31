@@ -2,7 +2,7 @@
 import type { AttributeValue } from "@aws-sdk/client-dynamodb";
 
 // Internal dependencies
-import { UnwrapType } from "../types/dynamodb";
+import type { UnwrapType } from "../types/dynamodb";
 
 // Types & Interfaces
 type DynamoResultLike = Record<string, AttributeValue>;
@@ -23,6 +23,6 @@ const unwrapTypes = <T extends DynamoResultLike>(item: T) => {
   }
 
   return output as UnwrapType<T>;
-}
+};
 
 export default unwrapTypes;

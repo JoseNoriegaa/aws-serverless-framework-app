@@ -1,5 +1,5 @@
-// External dependencies
-import { IUserModel, UnwrapType } from "../src/types/dynamodb";
+// Internal dependencies
+import type { IUserModel} from "../src/types/dynamodb";
 import unwrapTypes from "../src/utils/unwrapTypes";
 
 const USERS_MOCK = Array.from({ length: 15 }).map<IUserModel>((_, idx) => ({
@@ -14,6 +14,6 @@ const USERS_MOCK = Array.from({ length: 15 }).map<IUserModel>((_, idx) => ({
 const UNWRAPPED_USERS_MOCK = USERS_MOCK.map(unwrapTypes);
 
 export {
-  USERS_MOCK,
   UNWRAPPED_USERS_MOCK,
+  USERS_MOCK,
 };

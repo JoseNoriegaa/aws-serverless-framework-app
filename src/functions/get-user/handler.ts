@@ -24,7 +24,7 @@ const handler = async (event: IEvent<{ id: string }>): Promise<APIGatewayProxyRe
     return {
       statusCode: 404,
       body: JSON.stringify({ detail: `User with ID '${userId}' was not found.` })
-    }
+    };
   }
 
   return {

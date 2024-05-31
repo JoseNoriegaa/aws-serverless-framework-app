@@ -1,17 +1,17 @@
 // External dependencies
-import { DynamoDBClient, paginateScan, ScanCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, paginateScan } from "@aws-sdk/client-dynamodb";
 import { mockClient } from 'aws-sdk-client-mock';
 
 // Internal dependencies
 import { handler } from "../../../src/functions/get-users";
+import type { IUserModel } from "../../../src/types/dynamodb";
 import { UNWRAPPED_USERS_MOCK, USERS_MOCK } from "../../mocks";
-import { IUserModel } from "../../../src/types/dynamodb";
 
 // Types & Interfaces
 type Event = Parameters<typeof handler>[0];
 
 // Mocks
-const ddb = mockClient(DynamoDBClient);
+mockClient(DynamoDBClient);
 
 jest.mock('@aws-sdk/client-dynamodb', () => {
   const og = jest.requireActual('@aws-sdk/client-dynamodb');

@@ -32,7 +32,7 @@ const handler = async (event: IEvent<never, { lastKey?: string }>): Promise<APIG
     pageSize: PAGINATION_SIZE,
     count: items.length,
     items,
-  }
+  };
 
   return {
     statusCode: 200,
