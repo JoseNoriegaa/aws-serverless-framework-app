@@ -6,6 +6,7 @@ This is a AWS Serverless Framework Application that allows to save users in a da
 
 ## Architecture
 
+![sls-app-arch](https://github.com/JoseNoriegaa/aws-serverless-framework-app/assets/28733681/4e9ad68f-2458-4f3a-b7c7-96e6a7126134)
 
 ## Features
 - Implementation of Lambda functions for HTTP Events
